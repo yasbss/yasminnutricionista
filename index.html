@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guia Interativo para Consulta Nutricional - Yasmin Bernardes</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chosen Palette: Base (#F8F5F0), Primary (#6B8E6A), Accent (#D4A3A1) -->
+    <!-- Application Structure Plan: A single-page, scrollable application with a sticky navigation header. The structure is task-oriented, guiding the user through preparation steps. Key sections include an interactive checklist and a visual guide for taking measurements. This structure was chosen to transform a linear text manual into an engaging, step-by-step tool, making the information more digestible and reducing cognitive load for the patient. -->
+    <!-- Visualization & Content Choices: Report Info: 'Como tirar suas medidas'. Goal: Inform & Engage. Viz/Presentation: Interactive diagram of a human figure built with HTML/CSS. Interaction: User clicks on measurement names (e.g., 'Braço', 'Cintura'). This highlights the corresponding body part on the diagram and displays the specific instructions and an input field. Justification: This interactive approach is more intuitive and less error-prone than static text, improving accuracy and user engagement. Library/Method: Vanilla JS for DOM manipulation. Report Info: 'Antes da consulta' checklist. Goal: Organize. Viz/Presentation: A series of styled cards in a grid. Interaction: Links to external questionnaire. Justification: Breaks down tasks into clear, manageable steps. New Feature: 'Gerar Dica de Bem-Estar'. Goal: Motivate & Engage. Viz/Presentation: Button that triggers LLM call, displaying a motivational text. Interaction: Click button to generate tip. Justification: Provides dynamic, encouraging content, enhancing user experience. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+        .figure-part {
+            transition: all 0.3s ease-in-out;
+            background-color: #D1D5DB; /* A neutral gray for inactive parts */
+        }
+        .figure-part.active {
+            background-color: #6B8E6A; /* Primary green for active part */
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(107, 142, 106, 0.5);
+        }
+    </style>
+</head>
+<body class="bg-[#F8F5F0] text-[#6B8E6A]">
+
+    <header class="bg-[#F8F5F0]/80 backdrop-blur-lg shadow-sm sticky top-0 z-50">
+        <nav class="container mx-auto px-6 py-3 flex justify-between items-center">
+            <div class="font-bold text-lg text-[#6B8E6A]">
+                <a href="#inicio">Yasmin Bernardes <span class="font-normal text-sm text-gray-500">| Nutricionista</span></a>
+            </div>
+            <div class="hidden md:flex space-x-6">
+                <a href="#preparacao" class="text-[#6B8E6A] hover:text-[#D4A3A1] transition">Preparação</a>
+                <a href="#medidas" class="text-[#6B8E6A] hover:text-[#D4A3A1] transition">Medidas</a>
+                <a href="#atendimento" class="text-[#6B8E6A] hover:text-[#D4A3A1] transition">Atendimento</a>
+                <a href="#pagamento" class="text-[#6B8E6A] hover:text-[#D4A3A1] transition">Pagamento</a>
+                <a href="#contato" class="text-[#6B8E6A] hover:text-[#D4A3A1] transition">Contato</a>
+            </div>
+            <a href="#preparacao" class="md:hidden bg-[#D4A3A1] text-white px-4 py-2 rounded-full text-sm font-semibold hover:bg-[#C29290] transition">Começar</a>
+        </nav>
+    </header>
+
+    <main class="container mx-auto px-6 py-8 md:py-16">
+
+        <section id="inicio" class="text-center mb-16 md:mb-24">
+            <h1 class="text-3xl md:text-5xl font-bold text-[#6B8E6A] mb-4">Que alegria ter você por aqui!</h1>
+            <p class="max-w-3xl mx-auto text-gray-600 mb-8">
+                Preparei este guia interativo com muito carinho para te orientar antes da nossa consulta online. Com ele, você conseguirá se preparar com tranquilidade e garantir que nosso tempo juntos seja leve, prático e totalmente personalizado para você.
+            </p>
+        </section>
+
+        <section id="preparacao" class="mb-16 md:mb-24">
+            <div class="text-center mb-12">
+                <h2 class="text-2xl md:text-3xl font-bold mb-2">Sua Preparação Começa Aqui</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">Siga estes passos simples para que nossa consulta seja completa e direcionada às suas necessidades.</p>
+            </div>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                
+                <div class="bg-white p-6 rounded-xl shadow-md border border-stone-200 hover:shadow-lg transition-shadow">
+                    <h3 class="font-bold text-lg text-[#6B8E6A] mb-3">📝 1. Questionário de Avaliação</h3>
+                    <p class="text-gray-600 text-sm mb-4">Preencha o formulário online com suas informações de saúde, rotina e hábitos. É essencial para um atendimento focado em você.</p>
+                    <a href="https://docs.google.com/forms/d/e/1FAIpQLSdQXRUX6uqVbWxUtXq4orlK7pu45QE_LaGY_MMENUjk5vvd3A/viewform?pli=1" target="_blank" class="inline-block bg-[#D4A3A1] text-white px-5 py-2 rounded-full text-sm font-semibold hover:bg-[#C29290] transition">Acessar Questionário</a>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl shadow-md border border-stone-200 hover:shadow-lg transition-shadow">
+                    <h3 class="font-bold text-lg text-[#6B8E6A] mb-3">🍽️ 2. Registro Alimentar</h3>
+                    <p class="text-gray-600 text-sm mb-4">Anote tudo o que consumir durante 2 dias da semana e 1 dia do final de semana. Inclua horários, quantidades e modo de preparo.</p>
+                    <p class="text-xs text-gray-500">💡 Dica: anote logo após cada refeição para não esquecer!</p>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl shadow-md border border-stone-200 hover:shadow-lg transition-shadow md:col-span-2 lg:col-span-1">
+                    <h3 class="font-bold text-lg text-[#6B8E6A] mb-3">📸 3. Fotos (Opcional)</h3>
+                    <p class="text-gray-600 text-sm mb-4">Se sentir confortável, tire fotos de frente, lado e costas. Elas ajudam a visualizar sua evolução de forma clara e personalizada.</p>
+                    <p class="text-xs text-gray-500">📷 Lembre-se: mesmo horário e roupas semelhantes.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="medidas" class="mb-16 md:mb-24">
+            <div class="text-center mb-12">
+                <h2 class="text-2xl md:text-3xl font-bold mb-2">Como Tirar Suas Medidas</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">Use uma fita métrica e relaxe o corpo, sem apertar a fita ou prender a respiração. Clique em cada medida abaixo para ver como fazer e anotar seu resultado.</p>
+            </div>
+
+            <div class="flex flex-col md:flex-row gap-8 items-start">
+                <div class="w-full md:w-1/3 flex justify-center items-center">
+                    <div id="figure-container" class="relative" style="height: 400px; width: 120px;">
+                        <div id="figure-head" class="figure-part absolute top-0 left-1/2 -translate-x-1/2 h-12 w-12 rounded-full"></div>
+                        <div id="figure-neck" class="figure-part absolute top-12 left-1/2 -translate-x-1/2 h-3 w-6"></div>
+                        <div id="figure-torso" class="figure-part absolute top-[60px] left-1/2 -translate-x-1/2 h-28 w-20 rounded-t-lg"></div>
+                        <div id="figure-arm-left" class="figure-part absolute top-[60px] left-[-40px] h-24 w-8 rounded-lg"></div>
+                        <div id="figure-arm-right" class="figure-part absolute top-[60px] right-[-40px] h-24 w-8 rounded-lg"></div>
+                        <div id="figure-waist" class="figure-part absolute top-[110px] left-1/2 -translate-x-1/2 h-4 w-16"></div>
+                        <div id="figure-abdomen" class="figure-part absolute top-[138px] left-1/2 -translate-x-1/2 h-4 w-18"></div>
+                        <div id="figure-hips" class="figure-part absolute top-[160px] left-1/2 -translate-x-1/2 h-14 w-24 rounded-b-lg"></div>
+                        <div id="figure-leg-left" class="figure-part absolute bottom-0 left-[2px] h-36 w-12 rounded-lg"></div>
+                        <div id="figure-leg-right" class="figure-part absolute bottom-0 right-[2px] h-36 w-12 rounded-lg"></div>
+                    </div>
+                </div>
+
+                <div class="w-full md:w-2/3">
+                    <div id="instructions" class="bg-white p-6 rounded-xl shadow-md border border-stone-200 min-h-[150px] mb-6 flex items-center justify-center">
+                        <p class="text-gray-500 text-center">Selecione uma medida para ver as instruções aqui.</p>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4 mb-6">
+                        <div>
+                            <label for="altura" class="block text-sm font-medium text-gray-700">📍 Altura (cm)</label>
+                            <input type="number" id="altura" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#6B8E6A] focus:ring-[#6B8E6A]">
+                        </div>
+                        <div>
+                            <label for="peso" class="block text-sm font-medium text-gray-700">📍 Peso (kg)</label>
+                            <input type="number" id="peso" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#6B8E6A] focus:ring-[#6B8E6A]">
+                        </div>
+                        <button data-measure="braco" class="measure-btn bg-[#F8F5F0] p-3 rounded-lg text-[#6B8E6A] font-semibold hover:bg-[#EAE7E2] transition text-left">💪 Braço (cm)</button>
+                        <button data-measure="cintura" class="measure-btn bg-[#F8F5F0] p-3 rounded-lg text-[#6B8E6A] font-semibold hover:bg-[#EAE7E2] transition text-left">🌀 Cintura (cm)</button>
+                        <button data-measure="abdomen" class="measure-btn bg-[#F8F5F0] p-3 rounded-lg text-[#6B8E6A] font-semibold hover:bg-[#EAE7E2] transition text-left">🌀 Abdômen (cm)</button>
+                        <button data-measure="quadril" class="measure-btn bg-[#F8F5F0] p-3 rounded-lg text-[#6B8E6A] font-semibold hover:bg-[#EAE7E2] transition text-left">🍑 Quadril (cm)</button>
+                    </div>
+
+                    <div class="text-center">
+                        <button id="generate-tip-btn" class="bg-gradient-to-r from-[#D4A3A1] to-[#C29290] text-white px-6 py-3 rounded-full text-lg font-semibold hover:from-[#C29290] hover:to-[#B0817F] transition shadow-md hover:shadow-lg">
+                            Gerar Dica de Bem-Estar ✨
+                        </button>
+                        <div id="tip-display" class="mt-6 p-4 bg-white rounded-xl shadow-md border border-stone-200 min-h-[80px] flex items-center justify-center text-gray-700 italic">
+                            Clique no botão acima para uma dica!
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="atendimento" class="mb-16 md:mb-24 bg-[#F8F5F0]/50 p-8 rounded-2xl">
+            <div class="text-center mb-12">
+                <h2 class="text-2xl md:text-3xl font-bold mb-2 text-[#6B8E6A]">Sobre o Atendimento</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">Tudo acontece de forma 100% online, prática e segura.</p>
+            </div>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div>
+                    <h3 class="font-bold text-lg text-[#6B8E6A] mb-3">💻 Como nos conectamos?</h3>
+                    <ul class="space-y-2 text-gray-600">
+                        <li class="flex items-center"><span class="text-[#D4A3A1] mr-2">&#10003;</span> Via Google Meet, com link enviado no seu WhatsApp ou e-mail</li>
+                        <li class="flex items-center"><span class="text-[#D4A3A1] mr-2">&#10003;</span> Ou via chat de vídeo no app Dietbox, conforme sua preferência</li>
+                    </ul>
+                    <p class="text-sm text-gray-500 mt-4">📌 Você receberá o link e orientações com antecedência.</p>
+                </div>
+                <div>
+                    <h3 class="font-bold text-lg text-[#6B8E6A] mb-3">📩 Envio das Informações</h3>
+                    <p class="text-gray-600 mb-4">Envie pelo WhatsApp ou e-mail os seguintes itens:</p>
+                    <ul class="space-y-2 text-gray-600">
+                        <li class="flex items-center"><span class="text-[#D4A3A1] mr-2">&#10003;</span> Questionário preenchido</li>
+                        <li class="flex items-center"><span class="text-[#D4A3A1] mr-2">&#10003;</span> Registro alimentar de 3 dias</li>
+                        <li class="flex items-center"><span class="text-[#D4A3A1] mr-2">&#10003;</span> Fotos (se desejar)</li>
+                        <li class="flex items-center"><span class="text-[#D4A3A1] mr-2">&#10003;</span> Medidas corporais</li>
+                        <li class="flex items-center"><span class="text-[#D4A3A1] mr-2">&#10003;</span> Comprovante de pagamento após a consulta</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="pagamento" class="mb-16 md:mb-24">
+            <div class="text-center mb-12">
+                <h2 class="text-2xl md:text-3xl font-bold mb-2">Pagamento</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">O pagamento será realizado após a consulta. O plano alimentar será enviado somente após a confirmação.</p>
+            </div>
+            <div class="bg-white p-8 rounded-xl shadow-md border border-stone-200 max-w-xl mx-auto">
+                <h3 class="font-bold text-lg text-[#6B8E6A] mb-4">Formas de pagamento disponíveis:</h3>
+                <ul class="space-y-2 text-gray-600 mb-6">
+                    <li class="flex items-center"><span class="text-[#D4A3A1] mr-2">&#10003;</span> PIX</li>
+                    <li class="flex items-center"><span class="text-[#D4A3A1] mr-2">&#10003;</span> Transferência bancária</li>
+                    <li class="flex items-center"><span class="text-[#D4A3A1] mr-2">&#10003;</span> Cartão de crédito</li>
+                    <li class="flex items-center"><span class="text-[#D4A3A1] mr-2">&#10003;</span> Parcelamento em até 2x no cartão</li>
+                </ul>
+                <p class="text-sm text-gray-500">💬 Em caso de dúvidas ou necessidade de prazo, é só me avisar.</p>
+            </div>
+        </section>
+
+        <section id="contato" class="text-center mb-16 md:mb-24">
+            <h2 class="text-2xl md:text-3xl font-bold mb-4 text-[#6B8E6A]">🤍 Estou aqui para te apoiar!</h2>
+            <p class="max-w-3xl mx-auto text-gray-600 mb-8">
+                Conte comigo em cada passo da sua jornada com a nutrição. Obrigada pela confiança no meu trabalho — será um prazer cuidar de você!
+            </p>
+            <div class="flex flex-col md:flex-row justify-center items-center gap-4 text-gray-700">
+                <p class="flex items-center"><span class="text-[#D4A3A1] mr-2">&#128241;</span> Instagram: <a href="https://www.instagram.com/yasminnutricionista" target="_blank" class="text-[#D4A3A1] hover:underline">@yasminnutricionista</a></p>
+                <p class="flex items-center"><span class="text-[#D4A3A1] mr-2">&#128231;</span> E-mail: <a href="mailto:yasminn22bernardes@gmail.com" class="text-[#D4A3A1] hover:underline">yasminn22bernardes@gmail.com</a></p>
+                <p class="flex items-center"><span class="text-[#D4A3A1] mr-2">&#128222;</span> WhatsApp: <a href="https://wa.me/5534992007075" target="_blank" class="text-[#D4A3A1] hover:underline">(34) 99200-7075</a></p>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-[#6B8E6A] text-white py-6 text-center text-sm">
+        <p>&copy; 2025 Yasmin Bernardes – Nutricionista. Todos os direitos reservados.</p>
+    </footer>
+
+    <script>
+        const measurements = {
+            braco: {
+                instruction: "Meça no meio do caminho entre ombro e cotovelo, com o braço estendido ao lado do corpo. Dobre o braço para encontrar o ponto médio, depois estenda novamente e meça ali.",
+                figurePart: "figure-arm-right"
+            },
+            cintura: {
+                instruction: "Meça na parte mais fina do tronco, geralmente abaixo das costelas e acima do umbigo. Incline levemente o tronco para o lado – onde formar um vinco é o ponto certo para medir.",
+                figurePart: "figure-waist"
+            },
+            abdomen: {
+                instruction: "Meça na linha do umbigo, com o abdômen relaxado. Não prenda a respiração nem aperte a fita.",
+                figurePart: "figure-abdomen"
+            },
+            quadril: {
+                instruction: "Meça na parte mais larga dos glúteos. Use um espelho lateral para conferir se a fita está alinhada ao ponto mais volumoso do bumbum.",
+                figurePart: "figure-hips"
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const instructionDisplay = document.getElementById('instructions');
+            const measureButtons = document.querySelectorAll('.measure-btn');
+            const figureParts = document.querySelectorAll('.figure-part');
+            const generateTipBtn = document.getElementById('generate-tip-btn');
+            const tipDisplay = document.getElementById('tip-display');
+
+            measureButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const measureKey = button.dataset.measure;
+                    const data = measurements[measureKey];
+
+                    if (data) {
+                        instructionDisplay.innerHTML = `
+                            <div class="text-center">
+                                <p class="text-gray-700 mb-2">${data.instruction}</p>
+                                <label for="${measureKey}-input" class="block text-sm font-medium text-gray-700">Seu ${button.textContent.replace('(cm)', '').trim()} (cm)</label>
+                                <input type="number" id="${measureKey}-input" class="mt-1 block w-full max-w-[150px] mx-auto rounded-md border-gray-300 shadow-sm focus:border-[#6B8E6A] focus:ring-[#6B8E6A] text-center">
+                            </div>
+                        `;
+
+                        figureParts.forEach(part => part.classList.remove('active'));
+                        const activePart = document.getElementById(data.figurePart);
+                        if (activePart) {
+                            activePart.classList.add('active');
+                        }
+                    }
+                });
+            });
+
+            generateTipBtn.addEventListener('click', async () => {
+                tipDisplay.innerHTML = '<p class="text-[#6B8E6A]">Gerando sua dica... ✨</p>';
+                try {
+                    let chatHistory = [];
+                    const prompt = "Gere uma dica de bem-estar curta, encorajadora e geral para alguém em uma jornada de saúde, focando em consciência corporal, consistência ou hábitos positivos. Não dê conselhos médicos ou dietéticos específicos. Mantenha-a concisa e inspiradora.";
+                    chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+                    const payload = { contents: chatHistory };
+                    const apiKey = ""; 
+                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    const result = await response.json();
+                    if (result.candidates && result.candidates.length > 0 &&
+                        result.candidates[0].content && result.candidates[0].content.parts &&
+                        result.candidates[0].content.parts.length > 0) {
+                        const text = result.candidates[0].content.parts[0].text;
+                        tipDisplay.innerHTML = `<p class="text-gray-700">${text}</p>`;
+                    } else {
+                        tipDisplay.innerHTML = '<p class="text-red-500">Não foi possível gerar a dica. Tente novamente.</p>';
+                    }
+                } catch (error) {
+                    console.error("Erro ao chamar a API Gemini:", error);
+                    tipDisplay.innerHTML = '<p class="text-red-500">Erro na conexão. Verifique sua internet ou tente mais tarde.</p>';
+                }
+            });
+
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>
